@@ -117,7 +117,7 @@ func _physics_process(delta):
 
 	vel = move_and_slide(vel, Vector3(0, 1, 0), true)
 
-	if Game.running and not Game.debug:
+	if Game.running and Game.connected:
 		rpc_unreliable("update", global_transform, vel)
 
 
@@ -143,7 +143,7 @@ func _process(delta):
 				animation_player.play("Shoot")
 				shoot_sound.play()
 
-				if not Game.debug:
+				if Game.connected:
 					rpc("_do_shoot", shoot_pos.global_transform)
 				else:
 					_do_shoot(shoot_pos.global_transform)
@@ -154,7 +154,7 @@ func _process(delta):
 			if Input.is_action_just_pressed("player_shield") and energy > SHIELD_COST:
 				shield_sound.play()
 
-				if not Game.debug:
+				if Game.connected:
 					rpc("_do_shield", shield_pos.global_transform)
 				else:
 					_do_shield(shield_pos.global_transform)
@@ -174,7 +174,7 @@ func _process(delta):
 
 	if health <= 0 and not dead:
 		dead = true
-		if not Game.debug:
+		if Game.connected:
 			rpc("_killed")
 		emit_signal("died", true)
 
@@ -203,7 +203,7 @@ func splash_damage(damage, origin):
 #	var angle = atan2(away.x, away.z)-deg2rad(rotation_degrees.y)
 	HUD.hurt_flash(damage)
 
-	if not Game.debug:
+	if Game.connected:
 		rpc("_do_hit", damage)
 	else:
 		_do_hit(damage)

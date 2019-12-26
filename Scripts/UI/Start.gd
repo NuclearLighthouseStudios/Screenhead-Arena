@@ -52,6 +52,10 @@ func _on_JoinButton_pressed():
 	_save_config()
 	Menu.show_menu(Menu.CONNECTING)
 
+func _on_TrainingLink_pressed():
+	_save_config()
+	Game.start_training()
+
 func _on_PlayerName_text_entered(new_text):
 	if new_text.length() > 0:
 		_on_HostButton_pressed()

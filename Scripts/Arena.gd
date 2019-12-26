@@ -19,21 +19,13 @@ func _ready():
 	Game.connect("game_restart", self, "_on_game_restart")
 # warning-ignore:return_value_discarded
 	Game.connect("game_disconnected", self, "_on_game_disconnected")
+# warning-ignore:return_value_discarded
+	Game.connect("game_training", self, "_on_training")
+# warning-ignore:return_value_discarded
+	Game.connect("game_training_end", self, "_on_training_end")
 
 	if Game.debug:
-		$IdlePivot/IdleCam.current = false
-		$Figure.hide()
-
-		this_player = Player.instance()
-		this_player.connect("died", self, "_on_debug_player_died")
-		add_child(this_player)
-
-		this_player.global_transform = Transform().rotated(Vector3(0,1,0), deg2rad(randf()*360))
-		this_player.global_transform = this_player.global_transform.translated(Vector3(0,5,40))
-
-		Menu.hide_menu()
-		HUD.show_hud()
-		Game.start()
+		_on_training()
 
 func _process(delta):
 	if $Figure.visible:
@@ -48,7 +40,7 @@ func _process(delta):
 			add_child(clone)
 
 # warning-ignore:unused_argument
-func _on_debug_player_died(me):
+func _on_training_player_died(me):
 	$WinSound.play()
 
 	this_player.reset()
@@ -75,12 +67,38 @@ remote func _ring_collected():
 
 func _on_WinArea_body_entered(body):
 	if body == this_player:
-		if Game.debug:
-			_on_debug_player_died(false)
+		if Game.debug or Game.training:
+			_on_training_player_died(false)
 		else:
 			_win(true)
 			rpc("_ring_collected")
 
+func _on_training():
+	$IdlePivot/IdleCam.current = false
+	$Figure.hide()
+
+	get_tree().call_group("shields", "queue_free")
+
+	this_player = Player.instance()
+	this_player.connect("died", self, "_on_training_player_died")
+	add_child(this_player)
+
+	this_player.global_transform = Transform().rotated(Vector3(0,1,0), deg2rad(randf()*360))
+	this_player.global_transform = this_player.global_transform.translated(Vector3(0,5,40))
+
+	Menu.hide_menu()
+	HUD.show_hud()
+	Game.start()
+
+func _on_training_end():
+	Menu.show_menu(Menu.START)
+
+	this_player.queue_free()
+	HUD.hide_hud()
+
+	$Figure.show()
+
+	$IdlePivot/IdleCam.current = true
 
 func _on_game_disconnected():
 	Menu.show_menu(Menu.START)

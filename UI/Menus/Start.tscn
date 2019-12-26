@@ -31,11 +31,17 @@ text = "Screenhead
 Arena"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="MenuImage" type="TextureRect" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0
 texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="StartMenu" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -110,16 +116,28 @@ margin_bottom = 180.0
 alignment = 1
 
 [node name="VersionLabel" type="Label" parent="StartMenu/HBoxContainer2"]
-margin_right = 255.0
+margin_right = 109.0
 margin_bottom = 9.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color = Color( 0.317647, 0.317647, 0.317647, 1 )
-text = "NLS004/%s"
+text = "NLS004/v%s"
+
+[node name="TrainingLink" type="LinkButton" parent="StartMenu/HBoxContainer2"]
+margin_left = 113.0
+margin_right = 254.0
+margin_bottom = 9.0
+grow_horizontal = 0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.3
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.317647, 0.317647, 0.317647, 1 )
+text = "Training Mode"
+underline = 2
 
 [node name="CopyLink" type="LinkButton" parent="StartMenu/HBoxContainer2"]
-margin_left = 259.0
-margin_right = 319.0
+margin_left = 258.0
+margin_right = 318.0
 margin_bottom = 9.0
 custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color = Color( 0.317647, 0.317647, 0.317647, 1 )
@@ -131,4 +149,5 @@ underline = 2
 [connection signal="text_entered" from="StartMenu/HBoxContainer/VBoxContainer/GameCode" to="StartMenu" method="_on_GameCode_text_entered"]
 [connection signal="pressed" from="StartMenu/HBoxContainer/VBoxContainer2/HostButton" to="StartMenu" method="_on_HostButton_pressed"]
 [connection signal="pressed" from="StartMenu/HBoxContainer/VBoxContainer2/JoinButton" to="StartMenu" method="_on_JoinButton_pressed"]
+[connection signal="pressed" from="StartMenu/HBoxContainer2/TrainingLink" to="StartMenu" method="_on_TrainingLink_pressed"]
 [connection signal="pressed" from="StartMenu/HBoxContainer2/CopyLink" to="StartMenu" method="_on_CopyLink_pressed"]

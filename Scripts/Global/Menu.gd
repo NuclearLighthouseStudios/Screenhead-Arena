@@ -16,8 +16,11 @@ func _input(ev):
 	if ev.is_action_pressed('ui_toggle_fullscreen'):
 		OS.window_fullscreen = !OS.window_fullscreen
 
-	if (Game.debug or current_menu == START) and ev.is_action_pressed('ui_cancel') and OS.get_name() != "HTML5":
+	if (Game.debug or ( current_menu == START and menu_visible ) ) and ev.is_action_pressed('ui_cancel') and OS.get_name() != "HTML5":
 		get_tree().quit()
+
+	if Game.training and ev.is_action_pressed('ui_cancel'):
+		Game.end_training()
 
 	if ( not menu_visible or auto_lock ) and ev.is_action_pressed("ui_capture_mouse_click"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

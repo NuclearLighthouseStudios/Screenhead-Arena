@@ -1,5 +1,7 @@
 extends Node
 
+signal game_training
+signal game_training_end
 signal game_connected(other_player_id)
 signal game_restart
 signal game_disconnected
@@ -11,6 +13,7 @@ signal net_log(message)
 
 # warning-ignore:unused_class_variable
 var debug : bool = true
+var training : bool = false
 
 var running : bool = false
 var connected : bool = false
@@ -126,8 +129,9 @@ func _on_network_connected(game : String):
 # warning-ignore:shadowed_variable
 func host(player_name : String):
 	self.player_name = player_name
-	is_host = true
-	connected = false
+	self.is_host = true
+	self.connected = false
+	self.training = false
 
 	MultiplayerClient.host_game(ProjectSettings.get_setting("game/server"))
 
@@ -137,12 +141,23 @@ func host(player_name : String):
 func join(code : String, player_name : String):
 	self.player_name = player_name
 	self.game_code = code
-	is_host = false
-	connected = false
+	self.is_host = false
+	self.connected = false
+	self.training = false
 
 	MultiplayerClient.join_game(ProjectSettings.get_setting("game/server"), code)
 
 	return OK
+
+func start_training():
+	self.training = true
+
+	emit_signal("game_training")
+
+func end_training():
+	running = false
+	training = false
+	emit_signal("game_training_end")
 
 func start():
 	running = true
