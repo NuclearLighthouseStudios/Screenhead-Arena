@@ -1,0 +1,134 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Sounds/start.ogg" type="AudioStream" id=1]
+[ext_resource path="res://UI/Fonts/Huge.tres" type="DynamicFont" id=2]
+[ext_resource path="res://UI/Menu.png" type="Texture" id=3]
+[ext_resource path="res://UI/Screenhead.tres" type="Theme" id=4]
+[ext_resource path="res://Scripts/UI/Start.gd" type="Script" id=5]
+[ext_resource path="res://UI/Fonts/Small.tres" type="DynamicFont" id=6]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 1 )
+autoplay = true
+
+[node name="Title" type="Label" parent="."]
+margin_left = 24.0
+margin_top = 31.0
+margin_right = 160.0
+margin_bottom = 53.0
+size_flags_vertical = 1
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0.905882, 0.905882, 0.905882, 1 )
+custom_colors/font_color_shadow = Color( 0.882353, 0.8, 0.8, 1 )
+text = "Screenhead
+Arena"
+align = 1
+valign = 1
+
+[node name="MenuImage" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 3 )
+
+[node name="StartMenu" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.0
+theme = ExtResource( 4 )
+alignment = 2
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StartMenu"]
+margin_top = 115.0
+margin_right = 319.0
+margin_bottom = 167.0
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StartMenu/HBoxContainer"]
+margin_left = 78.0
+margin_right = 190.0
+margin_bottom = 52.0
+
+[node name="PlayerName" type="LineEdit" parent="StartMenu/HBoxContainer/VBoxContainer"]
+margin_right = 112.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 112, 0 )
+max_length = 16
+context_menu_enabled = false
+placeholder_text = "Your Name"
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="GameCode" type="LineEdit" parent="StartMenu/HBoxContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 112.0
+margin_bottom = 52.0
+max_length = 5
+context_menu_enabled = false
+placeholder_text = "Game Code"
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="StartMenu/HBoxContainer"]
+margin_left = 194.0
+margin_right = 240.0
+margin_bottom = 52.0
+
+[node name="HostButton" type="Button" parent="StartMenu/HBoxContainer/VBoxContainer2"]
+margin_right = 46.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+disabled = true
+shortcut_in_tooltip = false
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="StartMenu/HBoxContainer/VBoxContainer2"]
+margin_top = 28.0
+margin_right = 46.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+disabled = true
+shortcut_in_tooltip = false
+text = "Join"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="StartMenu"]
+margin_top = 171.0
+margin_right = 319.0
+margin_bottom = 180.0
+alignment = 1
+
+[node name="VersionLabel" type="Label" parent="StartMenu/HBoxContainer2"]
+margin_right = 255.0
+margin_bottom = 9.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.317647, 0.317647, 0.317647, 1 )
+text = "NLS004/%s"
+
+[node name="CopyLink" type="LinkButton" parent="StartMenu/HBoxContainer2"]
+margin_left = 259.0
+margin_right = 319.0
+margin_bottom = 9.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.317647, 0.317647, 0.317647, 1 )
+text = "©2019 NLS"
+underline = 2
+[connection signal="text_changed" from="StartMenu/HBoxContainer/VBoxContainer/PlayerName" to="StartMenu" method="_on_PlayerName_text_changed"]
+[connection signal="text_entered" from="StartMenu/HBoxContainer/VBoxContainer/PlayerName" to="StartMenu" method="_on_PlayerName_text_entered"]
+[connection signal="text_changed" from="StartMenu/HBoxContainer/VBoxContainer/GameCode" to="StartMenu" method="_on_GameCode_text_changed"]
+[connection signal="text_entered" from="StartMenu/HBoxContainer/VBoxContainer/GameCode" to="StartMenu" method="_on_GameCode_text_entered"]
+[connection signal="pressed" from="StartMenu/HBoxContainer/VBoxContainer2/HostButton" to="StartMenu" method="_on_HostButton_pressed"]
+[connection signal="pressed" from="StartMenu/HBoxContainer/VBoxContainer2/JoinButton" to="StartMenu" method="_on_JoinButton_pressed"]
+[connection signal="pressed" from="StartMenu/HBoxContainer2/CopyLink" to="StartMenu" method="_on_CopyLink_pressed"]

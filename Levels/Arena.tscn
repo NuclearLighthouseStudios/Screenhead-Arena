@@ -1,0 +1,285 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://Scripts/Arena.gd" type="Script" id=1]
+[ext_resource path="res://Sounds/win.ogg" type="AudioStream" id=2]
+[ext_resource path="res://Sounds/background.ogg" type="AudioStream" id=3]
+[ext_resource path="res://Scripts/Helpers/RandomPitch.gd" type="Script" id=4]
+[ext_resource path="res://Entities/Figure.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Sounds/light.ogg" type="AudioStream" id=6]
+[ext_resource path="res://Models/Ring.tres" type="ArrayMesh" id=7]
+[ext_resource path="res://Scripts/Entities/Ring.gd" type="Script" id=8]
+[ext_resource path="res://Materials/Concrete.tres" type="Material" id=9]
+[ext_resource path="res://Materials/Crate.tres" type="Material" id=10]
+[ext_resource path="res://Entities/Fire.tscn" type="PackedScene" id=11]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Idle"
+length = 100.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 100 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "Spin"
+length = 30.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 30 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 360, 0 ), Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 0, 0, 0, 1 )
+emission_enabled = true
+emission = Color( 1, 1, 1, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="CylinderMesh" id=4]
+material = SubResource( 3 )
+top_radius = 0.001
+radial_segments = 4
+rings = 1
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.584181, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Animation" id=6]
+length = 8.0
+loop = true
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:translation:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 38, -1.97352, -0.000293732, 1.97352, 0.000293732, 40, -1.41863, -0.00801468, 1.41863, 0.00801468, 38, -1.64525, 0.00902939, 1.64525, -0.00902939 ),
+"times": PoolRealArray( 0, 4, 8 )
+}
+
+[sub_resource type="SphereShape" id=7]
+radius = 1.25
+
+[node name="Arena" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="WinSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+
+[node name="AmbientAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+volume_db = -3.0
+pitch_scale = 0.5
+autoplay = true
+script = ExtResource( 4 )
+
+[node name="IdlePivot" type="Spatial" parent="."]
+transform = Transform( 0.995642, 0, 0.0932542, 0, 1, 0, -0.0932542, 0, 0.995642, 0, 0, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="IdlePivot"]
+autoplay = "Idle"
+anims/Idle = SubResource( 1 )
+
+[node name="IdleCam" type="Camera" parent="IdlePivot"]
+transform = Transform( 1, 0, 0, 0, 0.92388, 0.382683, 0, -0.382683, 0.92388, 0, 40, 100 )
+current = true
+fov = 50.0
+near = 1.0
+far = 200.0
+
+[node name="Figure" parent="." instance=ExtResource( 5 )]
+transform = Transform( 5, 0, 8.74228e-07, 0, 5, 0, -8.74228e-07, 0, 5, 0, 17.5422, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Figure"]
+autoplay = "Spin"
+anims/Spin = SubResource( 2 )
+
+[node name="Light" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 38, 0 )
+
+[node name="OmniLight" type="OmniLight" parent="Light"]
+light_energy = 0.25
+shadow_enabled = true
+shadow_bias = 0.5
+omni_range = 125.0
+omni_attenuation = 0.5
+omni_shadow_mode = 0
+
+[node name="Particles" type="CPUParticles" parent="Light"]
+cast_shadow = 0
+amount = 20
+mesh = SubResource( 4 )
+flag_align_y = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 3.0
+angular_velocity = 1.77965e-43
+damping = 3.5
+scale_amount_curve = SubResource( 5 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Light"]
+autoplay = "Float"
+anims/Float = SubResource( 6 )
+
+[node name="LightSound" type="AudioStreamPlayer3D" parent="Light"]
+stream = ExtResource( 6 )
+unit_db = 8.0
+unit_size = 1.5
+pitch_scale = 0.89
+autoplay = true
+doppler_tracking = 2
+
+[node name="WinArea" type="Area" parent="Light"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Light/WinArea"]
+shape = SubResource( 7 )
+
+[node name="Ring" type="MeshInstance" parent="Light"]
+cast_shadow = 0
+mesh = ExtResource( 7 )
+material/0 = null
+script = ExtResource( 8 )
+
+[node name="World" type="Spatial" parent="."]
+
+[node name="Floor" type="Spatial" parent="World"]
+
+[node name="CSGCylinder" type="CSGCylinder" parent="World/Floor"]
+use_collision = true
+radius = 120.0
+material = ExtResource( 9 )
+
+[node name="Pillars" type="Spatial" parent="World"]
+
+[node name="CSGBox" type="CSGBox" parent="World/Pillars"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 3, -35 )
+use_collision = true
+width = 3.0
+height = 5.0
+depth = 3.0
+material = ExtResource( 9 )
+
+[node name="CSGBox5" type="CSGBox" parent="World/Pillars"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -35 )
+use_collision = true
+width = 3.0
+height = 5.0
+depth = 3.0
+material = ExtResource( 9 )
+
+[node name="CSGBox6" type="CSGBox" parent="World/Pillars"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 3, -35 )
+use_collision = true
+width = 3.0
+height = 5.0
+depth = 3.0
+material = ExtResource( 9 )
+
+[node name="CSGBox7" type="CSGBox" parent="World/Pillars"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 3, 0 )
+use_collision = true
+width = 3.0
+height = 5.0
+depth = 3.0
+material = ExtResource( 9 )
+
+[node name="CSGBox8" type="CSGBox" parent="World/Pillars"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 3, 0 )
+use_collision = true
+width = 3.0
+height = 5.0
+depth = 3.0
+material = ExtResource( 9 )
+
+[node name="CSGBox9" type="CSGBox" parent="World/Pillars"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 3, 35 )
+use_collision = true
+width = 3.0
+height = 5.0
+depth = 3.0
+material = ExtResource( 9 )
+
+[node name="CSGBox10" type="CSGBox" parent="World/Pillars"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 35 )
+use_collision = true
+width = 3.0
+height = 5.0
+depth = 3.0
+material = ExtResource( 9 )
+
+[node name="CSGBox11" type="CSGBox" parent="World/Pillars"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 3, 35 )
+use_collision = true
+width = 3.0
+height = 5.0
+depth = 3.0
+material = ExtResource( 9 )
+
+[node name="Crates" type="Spatial" parent="World"]
+
+[node name="CSGBox2" type="CSGBox" parent="World/Crates"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.6421, 1.5, 0 )
+use_collision = true
+material = ExtResource( 10 )
+
+[node name="CSGBox3" type="CSGBox" parent="World/Crates"]
+transform = Transform( -0.231326, 0, -0.972876, 0, 1, 0, 0.972876, 0, -0.231326, -11.7841, 1.5, 22.9356 )
+use_collision = true
+material = ExtResource( 10 )
+
+[node name="CSGBox4" type="CSGBox" parent="World/Crates"]
+transform = Transform( -0.972685, 0, 0.23213, 0, 1, 0, -0.23213, 0, -0.972685, -28.7632, 1.5, -19.7984 )
+use_collision = true
+material = ExtResource( 10 )
+
+[node name="CSGBox12" type="CSGBox" parent="World/Crates"]
+transform = Transform( -0.576428, 0, 0.817148, 0, 1, 0, -0.817148, 0, -0.576428, 6.51755, 1.5, -18.9624 )
+use_collision = true
+material = ExtResource( 10 )
+
+[node name="Fires" type="Spatial" parent="."]
+
+[node name="Fire" parent="Fires" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82, 0.471, 0 )
+
+[node name="Fire2" parent="Fires" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 58.5, 0.471, 58.5 )
+
+[node name="Fire3" parent="Fires" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.471, 82 )
+
+[node name="Fire4" parent="Fires" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -58.5, 0.471, 58.5 )
+
+[node name="Fire5" parent="Fires" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -82, 0.471, 0 )
+
+[node name="Fire6" parent="Fires" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -58.5, 0.471, -58.5 )
+
+[node name="Fire7" parent="Fires" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.471, -82 )
+
+[node name="Fire8" parent="Fires" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 58.5, 0.471, -58.5 )
+[connection signal="body_entered" from="Light/WinArea" to="." method="_on_WinArea_body_entered"]

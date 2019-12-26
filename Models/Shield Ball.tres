@@ -1,0 +1,8 @@
+[gd_resource type="SphereMesh" load_steps=2 format=2]
+
+[ext_resource path="res://Materials/Shield.tres" type="Material" id=1]
+
+[resource]
+material = ExtResource( 1 )
+radial_segments = 4
+rings = 2

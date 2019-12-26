@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Models/Fire Ball.tres" type="SphereMesh" id=2]
+[ext_resource path="res://Scripts/Helpers/FlickerLight.gd" type="Script" id=3]
+[ext_resource path="res://Sounds/fire.ogg" type="AudioStream" id=4]
+[ext_resource path="res://Scripts/Helpers/RandomStart.gd" type="Script" id=5]
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.202889, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[node name="Fire" type="Spatial"]
+
+[node name="Particles" type="CPUParticles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.628541, 0 )
+cast_shadow = 0
+amount = 20
+mesh = ExtResource( 2 )
+flag_rotate_y = true
+spread = 180.0
+gravity = Vector3( 0, 15, 0 )
+initial_velocity = 6.0
+initial_velocity_random = 1.0
+angular_velocity = 15.0
+angular_velocity_random = 1.0
+damping = 15.0
+scale_amount_curve = SubResource( 1 )
+
+[node name="OmniLight" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0 )
+light_color = Color( 0.898039, 0.717647, 0.168627, 1 )
+omni_range = 20.0
+omni_attenuation = 2.0
+script = ExtResource( 3 )
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 4 )
+unit_db = 25.0
+unit_size = 2.0
+autoplay = true
+doppler_tracking = 2
+script = ExtResource( 5 )

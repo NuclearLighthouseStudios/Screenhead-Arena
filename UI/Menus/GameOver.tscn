@@ -1,0 +1,78 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://UI/Screenhead.tres" type="Theme" id=1]
+[ext_resource path="res://Scripts/UI/GameOver.gd" type="Script" id=2]
+[ext_resource path="res://UI/Fonts/Big.tres" type="DynamicFont" id=3]
+[ext_resource path="res://UI/Fonts/Small.tres" type="DynamicFont" id=4]
+
+[sub_resource type="InputEventAction" id=1]
+action = "ui_cancel"
+
+[sub_resource type="ShortCut" id=2]
+shortcut = SubResource( 1 )
+
+[node name="GameOver" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+alignment = 1
+script = ExtResource( 2 )
+
+[node name="Message" type="Label" parent="."]
+margin_top = 42.0
+margin_right = 320.0
+margin_bottom = 63.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_fonts/font = ExtResource( 3 )
+text = "Game Over"
+align = 1
+
+[node name="Scores" type="Label" parent="."]
+margin_top = 67.0
+margin_right = 320.0
+margin_bottom = 88.0
+custom_fonts/font = ExtResource( 4 )
+text = "%s vs. %s
+%s - %s"
+align = 1
+
+[node name="Spacer" type="Control" parent="."]
+margin_top = 92.0
+margin_right = 320.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 8 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_top = 104.0
+margin_right = 320.0
+margin_bottom = 124.0
+custom_constants/separation = 10
+alignment = 1
+
+[node name="Disconnect" type="Button" parent="HBoxContainer"]
+margin_left = 81.0
+margin_right = 171.0
+margin_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+shortcut_in_tooltip = false
+shortcut = SubResource( 2 )
+text = "Disconnect"
+
+[node name="Again" type="Button" parent="HBoxContainer"]
+margin_left = 181.0
+margin_right = 238.0
+margin_bottom = 20.0
+shortcut_in_tooltip = false
+text = "Again!"
+
+[node name="AgainLabel" type="Label" parent="."]
+margin_top = 128.0
+margin_right = 320.0
+margin_bottom = 137.0
+custom_fonts/font = ExtResource( 4 )
+align = 1
+[connection signal="pressed" from="HBoxContainer/Disconnect" to="." method="_on_Disconnect_pressed"]
+[connection signal="pressed" from="HBoxContainer/Again" to="." method="_on_Again_pressed"]
