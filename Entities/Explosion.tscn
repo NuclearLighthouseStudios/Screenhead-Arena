@@ -64,7 +64,7 @@ tracks/1/keys = {
 script = ExtResource( 1 )
 
 [node name="OmniLight" type="OmniLight" parent="."]
-light_color = Color( 0.937255, 0.760784, 0.337255, 1 )
+light_color = Color( 0.941176, 0.713726, 0.317647, 1 )
 shadow_enabled = true
 omni_range = 0.2
 omni_attenuation = 2.0

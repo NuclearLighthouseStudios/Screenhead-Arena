@@ -33,7 +33,7 @@ scale_amount_curve = SubResource( 1 )
 
 [node name="OmniLight" type="OmniLight" parent="."]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.289094, 0.940244, -0.614919 )
-light_color = Color( 0.937255, 0.760784, 0.337255, 1 )
+light_color = Color( 0.929412, 0.670588, 0.219608, 1 )
 light_energy = 1.25
 omni_range = 25.0
 omni_attenuation = 2.0

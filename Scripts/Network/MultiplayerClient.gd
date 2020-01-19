@@ -117,7 +117,6 @@ func _ws_parse_msg():
 	if cmd == "GAME":
 		self.game = data
 		emit_signal("connected", self.game)
-		return
 
 	elif cmd == "PEER":
 		_connect_peer()
