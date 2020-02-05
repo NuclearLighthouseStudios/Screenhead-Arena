@@ -86,8 +86,8 @@ func _connection_succeeded():
 	ws_client.disconnect_from_host()
 
 
-func _ws_connection_closed(clean : bool = false):
-	if rtc_mp.get_peers().size() <= 0 or not clean:
+func _ws_connection_closed(_clean : bool):
+	if rtc_mp.get_peers().size() <= 0:
 		emit_signal("connection_failed")
 
 func _ws_connected(_protocol : String = ""):
